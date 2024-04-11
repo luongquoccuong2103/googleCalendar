@@ -1,29 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CalendarService } from './calendar/calendar.service';
-import { CalendarController } from './calendar/calendar.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { User } from './entities/user.entity';
+import { CalendarModule } from './calendar/calendar.module';
+import config from 'ormconfig';
 @Module({
   imports: [
+    TypeOrmModule.forRoot(config),
     AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'testDB',
-      entities: [User],
-      synchronize: true,
-      autoLoadEntities: true,
-    }),
     UserModule,
+    CalendarModule,
   ],
-  controllers: [AppController, CalendarController],
-  providers: [AppService, CalendarService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
