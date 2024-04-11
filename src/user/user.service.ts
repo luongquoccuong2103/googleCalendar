@@ -18,7 +18,7 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.userRepo.create(createUserDto);
+    const user = this.userRepo.create(createUserDto);
     await this.userRepo.save(user);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
