@@ -14,15 +14,7 @@ const event = {
     dateTime: '2024-04-28T17:00:00-07:00',
     timeZone: 'America/Los_Angeles',
   },
-  recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
   attendees: [{ email: 'lpage@example.com' }, { email: 'sbrin@example.com' }],
-  reminders: {
-    useDefault: false,
-    overrides: [
-      { method: 'email', minutes: 24 * 60 },
-      { method: 'popup', minutes: 10 },
-    ],
-  },
 };
 
 @Controller('/events')

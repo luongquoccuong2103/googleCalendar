@@ -4,6 +4,9 @@ import * as path from 'path';
 import { authenticate } from '@google-cloud/local-auth';
 import { google, calendar_v3 } from 'googleapis';
 import { OAuth2Client, GoogleAuth } from 'google-auth-library';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Event } from 'src/entities/event.entity';
+import { Repository } from 'typeorm';
 @Injectable()
 export class CalendarService {
   private readonly logger = new Logger(CalendarService.name);
@@ -19,7 +22,9 @@ export class CalendarService {
 
   private calendar: calendar_v3.Calendar;
 
-  constructor() {
+  constructor(
+    @InjectRepository(Event) private readonly eventRepo: Repository<Event>,
+  ) {
     this.initialize();
   }
 
