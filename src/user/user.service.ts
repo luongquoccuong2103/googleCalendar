@@ -1,31 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
 import { CreateUserDto, UpdateUserDto } from './dto/createUserDto';
-
+import { FirebaseService } from 'src/core/firestore.service';
+// import { FirebaseLocalService } from 'src/core/firestore-local.service';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepo: Repository<User>,
+    // private readonly firebaseLocalService: FirebaseLocalService,
+    private readonly firebaseService: FirebaseService,
   ) {}
-  async findOne(id: string) {
-    return await this.userRepo.findOne({ where: { id: id } });
+
+  async getAllUsers(): Promise<any[]> {
+    return this.firebaseService.getAllData('users');
   }
 
   async findOneWithUserName(userName: string) {
-    return await this.userRepo.findOne({ where: { email: userName } });
+    const users = await this.firebaseService.getAllData('users');
+    return users.find((user) => user.email === userName);
   }
 
   async create(createUserDto: CreateUserDto) {
-    const user = this.userRepo.create(createUserDto);
-    await this.userRepo.save(user);
+    const bcryptPassword = await bcrypt.hash(createUserDto.password, 10);
+    createUserDto.password = bcryptPassword;
+    const newUser = await this.firebaseService.addUser('users', createUserDto);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
+    const { password, ...result } = newUser;
     return result;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.userRepo.update(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.firebaseService.updateUser('users', id, updateUserDto);
   }
 }

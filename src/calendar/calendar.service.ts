@@ -4,9 +4,6 @@ import * as path from 'path';
 import { authenticate } from '@google-cloud/local-auth';
 import { google, calendar_v3 } from 'googleapis';
 import { OAuth2Client, GoogleAuth } from 'google-auth-library';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Event } from 'src/entities/event.entity';
-import { Repository } from 'typeorm';
 @Injectable()
 export class CalendarService {
   private readonly logger = new Logger(CalendarService.name);
@@ -22,9 +19,7 @@ export class CalendarService {
 
   private calendar: calendar_v3.Calendar;
 
-  constructor(
-    @InjectRepository(Event) private readonly eventRepo: Repository<Event>,
-  ) {
+  constructor() {
     this.initialize();
   }
 
@@ -128,9 +123,6 @@ export class CalendarService {
     event: calendar_v3.Schema$Event,
   ): Promise<calendar_v3.Schema$Event | null> {
     try {
-      console.log('event id: ', eventId);
-      console.log('event: ', event);
-
       const result = await this.calendar.events.update({
         eventId: eventId,
         calendarId: 'primary',
