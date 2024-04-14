@@ -5,8 +5,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { CalendarModule } from './calendar/calendar.module';
 import { CoreModule } from './core/core.module';
+import { EventModule } from './event/event.module';
 @Module({
-  imports: [UserModule, AuthModule, CalendarModule, CoreModule],
+  imports: [UserModule, AuthModule, CalendarModule, CoreModule, EventModule],
   controllers: [AppController],
   providers: [AppService],
 })
