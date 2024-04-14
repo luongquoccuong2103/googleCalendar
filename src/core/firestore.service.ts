@@ -32,18 +32,19 @@ export class FirebaseService {
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   }
 
-  async addUser(collectionPath: string, data: any): Promise<any> {
+  async add(collectionPath: string, data: any): Promise<any> {
     const docRef = await this.db.collection(collectionPath).add(data);
     const snapshot = await docRef.get();
     return { id: snapshot.id, ...snapshot.data() };
   }
 
-  async updateUser(
-    collectionPath: string,
-    id: string,
-    data: any,
-  ): Promise<void> {
+  async update(collectionPath: string, id: string, data: any): Promise<void> {
     await this.db.collection(collectionPath).doc(id).update(data);
+    return;
+  }
+
+  async delete(collectionPath: string, id: string): Promise<void> {
+    await this.db.collection(collectionPath).doc(id).delete();
     return;
   }
 

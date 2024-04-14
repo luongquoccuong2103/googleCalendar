@@ -22,13 +22,13 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const bcryptPassword = await bcrypt.hash(createUserDto.password, 10);
     createUserDto.password = bcryptPassword;
-    const newUser = await this.firebaseService.addUser('users', createUserDto);
+    const newUser = await this.firebaseService.add('users', createUserDto);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = newUser;
     return result;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    return await this.firebaseService.updateUser('users', id, updateUserDto);
+    return await this.firebaseService.update('users', id, updateUserDto);
   }
 }

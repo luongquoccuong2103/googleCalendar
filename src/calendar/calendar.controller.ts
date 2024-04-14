@@ -17,7 +17,7 @@ const event = {
   attendees: [{ email: 'lpage@example.com' }, { email: 'sbrin@example.com' }],
 };
 
-@Controller('/events')
+@Controller('/google-calendar')
 export class CalendarController {
   constructor(private readonly googleCalendarService: CalendarService) {}
 
