@@ -12,7 +12,7 @@ import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
     JwtModule.register({
       secret: 'secretjwt4565',
       signOptions: {
-        expiresIn: '60s',
+        expiresIn: '3600s',
       },
     }),
   ],

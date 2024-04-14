@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto/createUserDto';
 import { FirebaseService } from 'src/core/firestore.service';
 // import { FirebaseLocalService } from 'src/core/firestore-local.service';
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 @Injectable()
 export class UserService {
   constructor(
@@ -19,13 +20,26 @@ export class UserService {
     return users.find((user) => user.email === userName);
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, response: Response) {
     const bcryptPassword = await bcrypt.hash(createUserDto.password, 10);
     createUserDto.password = bcryptPassword;
+    const users = await this.firebaseService.getAllData('users');
+    const user = users.find((user) => user.email === createUserDto.email);
+
+    if (user) {
+      return response.status(HttpStatus.NOT_ACCEPTABLE).json({
+        statusCode: HttpStatus.NOT_ACCEPTABLE,
+        message: 'Email already exist',
+      });
+    }
     const newUser = await this.firebaseService.add('users', createUserDto);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = newUser;
-    return result;
+    return response.status(HttpStatus.CREATED).json({
+      statusCode: HttpStatus.CREATED,
+      message: 'OK',
+      data: result,
+    });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

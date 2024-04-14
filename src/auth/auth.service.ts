@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from './../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,20 +21,24 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: User, response: Response) {
     const payload = {
       username: user.email,
       sub: {
         name: user.name,
       },
     };
-    return {
-      ...user,
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, {
-        expiresIn: '7d',
-      }),
-    };
+    return response.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: {
+        ...user,
+        accessToken: this.jwtService.sign(payload),
+        refreshToken: this.jwtService.sign(payload, {
+          expiresIn: '7d',
+        }),
+      },
+    });
   }
 
   async refreshToken(user: User) {

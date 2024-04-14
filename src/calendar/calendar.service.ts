@@ -4,6 +4,8 @@ import * as path from 'path';
 import { authenticate } from '@google-cloud/local-auth';
 import { google, calendar_v3 } from 'googleapis';
 import { OAuth2Client, GoogleAuth } from 'google-auth-library';
+import { FirebaseService } from 'src/core/firestore.service';
+import { StatusType } from 'src/entities/event.entity';
 @Injectable()
 export class CalendarService {
   private readonly logger = new Logger(CalendarService.name);
@@ -19,7 +21,7 @@ export class CalendarService {
 
   private calendar: calendar_v3.Calendar;
 
-  constructor() {
+  constructor(private firebaseService: FirebaseService) {
     this.initialize();
   }
 
@@ -78,26 +80,6 @@ export class CalendarService {
     return client;
   }
 
-  async listNext10Events(): Promise<void> {
-    const res = await this.calendar.events.list({
-      calendarId: 'primary',
-      timeMin: new Date().toISOString(),
-      maxResults: 10,
-      singleEvents: true,
-      orderBy: 'startTime',
-    });
-    const events = res.data.items;
-    if (!events || events.length === 0) {
-      this.logger.log('No upcoming events found.');
-      return;
-    }
-    this.logger.log('Upcoming 10 events:');
-    events.forEach((event) => {
-      const start = event.start.dateTime || event.start.date;
-      this.logger.log(`${start} - ${event.summary}`);
-    });
-  }
-
   async createEvent(
     event: calendar_v3.Schema$Event,
   ): Promise<calendar_v3.Schema$Event | null> {
@@ -153,5 +135,115 @@ export class CalendarService {
       );
       return null;
     }
+  }
+
+  private mapToGoogleCalendarEvent(event: any): calendar_v3.Schema$Event {
+    console.log('event: ', event);
+    const startDateTime = new Date(event.start_datetime);
+    const endDateTime = new Date(event.end_datetime);
+
+    if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+      throw new Error('Invalid date format');
+    }
+    return {
+      summary: event.summary,
+      location: event.location,
+      description: event.description,
+      start: {
+        dateTime: event.start_datetime,
+        timeZone: event.time_zone,
+      },
+      end: {
+        dateTime: event.end_datetime,
+        timeZone: event.time_zone,
+      },
+      attendees: event.attendees?.map((email) => ({ email })),
+    };
+  }
+
+  private async handleNewEvent(event: any): Promise<void> {
+    const googleCalendarEvent = this.mapToGoogleCalendarEvent(event);
+
+    const createdEvent = await this.createEvent(googleCalendarEvent);
+    if (createdEvent) {
+      await this.firebaseService.update('event', event.id, {
+        googleCalendarEventId: createdEvent.id,
+        status: StatusType.synced,
+      });
+    }
+  }
+
+  async handleUpdateEvent(event: any) {
+    if (!event.googleCalendarEventId) {
+      console.log(
+        `Event ${event.id} is missing googleCalendarEventId and cannot be updated.`,
+      );
+      return;
+    }
+
+    const googleCalendarEvent = this.mapToGoogleCalendarEvent(event);
+
+    try {
+      const updatedEvent = await this.calendar.events.update({
+        calendarId: 'primary',
+        eventId: event.googleCalendarEventId,
+        requestBody: googleCalendarEvent,
+      });
+      console.log(`Event updated: ${updatedEvent.data.htmlLink}`);
+
+      await this.firebaseService.update('event', event.id, {
+        status: StatusType.synced,
+      });
+    } catch (error) {
+      console.error(
+        `Failed to update event ${event.id} on Google Calendar`,
+        error,
+      );
+    }
+  }
+
+  async handleCancelEvent(event: any) {
+    if (!event.googleCalendarEventId) {
+      console.log(
+        `Event ${event.id} is missing googleCalendarEventId and cannot be canceled.`,
+      );
+      return;
+    }
+
+    try {
+      await this.calendar.events.delete({
+        calendarId: 'primary',
+        eventId: event.googleCalendarEventId,
+      });
+      console.log(`Event ${event.id} canceled on Google Calendar.`);
+
+      await this.firebaseService.update('event', event.id, {
+        status: StatusType.synced,
+      });
+    } catch (error) {
+      console.error(
+        `Failed to cancel event ${event.id} on Google Calendar`,
+        error,
+      );
+    }
+  }
+
+  async syncGoogleCalendarEvents(): Promise<any> {
+    const events = await this.firebaseService.getAllData('event');
+    console.log('cronjob start');
+    for (const event of events) {
+      switch (event.status) {
+        case StatusType.insert:
+          await this.handleNewEvent(event);
+          break;
+        case StatusType.update:
+          await this.handleUpdateEvent(event);
+          break;
+        case StatusType.cancel:
+          await this.handleCancelEvent(event);
+          break;
+      }
+    }
+    console.log('cronjob end');
   }
 }

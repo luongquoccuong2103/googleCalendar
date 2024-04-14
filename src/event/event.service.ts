@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FirebaseService } from 'src/core/firestore.service';
+import { CreateEventDto } from './dto/event.dto';
 
 @Injectable()
 export class EventService {
@@ -9,15 +10,21 @@ export class EventService {
     return this.firebaseService.getAllData('event');
   }
 
-  async findOneWithEventrName(userName: string) {
-    const users = await this.firebaseService.getAllData('event');
-    return users.find((user) => user.email === userName);
+  async findOneWithEventName(userName: string) {
+    const events = await this.firebaseService.getAllData('event');
+    return events.find((user) => user.email === userName);
   }
 
-  async create(createEventDto: any) {
-    const newUser = await this.firebaseService.add('event', createEventDto);
+  async create(createEventDto: CreateEventDto) {
+    const start_datetime = new Date(createEventDto.start_datetime);
+    const end_datetime = new Date(createEventDto.end_datetime);
+    if (isNaN(start_datetime.getTime()) || isNaN(end_datetime.getTime())) {
+      throw new Error('Invalid date format');
+    }
+
+    const newEvent = await this.firebaseService.add('event', createEventDto);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = newUser;
+    const { password, ...result } = newEvent;
     return result;
   }
 

@@ -1,15 +1,36 @@
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { StatusType } from 'src/entities/event.entity';
 import { PartialType } from '@nestjs/mapped-types';
-import { IsEmail, IsString } from 'class-validator';
-
-export class CreateUserDto {
+export class CreateEventDto {
   @IsString()
-  name: string;
-
-  @IsEmail()
-  email: string;
+  summary: string;
 
   @IsString()
-  password: string;
+  @IsOptional()
+  location?: string;
+
+  @IsString()
+  description: string;
+
+  @IsString()
+  start_datetime: string;
+
+  @IsString()
+  end_datetime: string;
+
+  @IsString()
+  time_zone: string;
+
+  @IsEnum(StatusType)
+  status: StatusType = StatusType.insert;
+
+  @IsString({ each: true })
+  @IsOptional()
+  attendees?: string[];
 }
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateEventDto extends PartialType(CreateEventDto) {
+  @IsString()
+  @IsOptional()
+  googleCalendarEventId?: string;
+}
