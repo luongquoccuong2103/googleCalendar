@@ -1,4 +1,4 @@
-# Weather Forecast Traffic Cam Backend
+# Google Calendar Booking Backend
 
 ## Description
 This project, 'google-calendar-booking-backend', is a backend service designed to provide custom apis to create/update/cancel booking events, and a schedule job which will automatic sync all the events on Google Calendar. It's built using the NestJS framework, hosting by Firebase functions and Firestore for database management.
