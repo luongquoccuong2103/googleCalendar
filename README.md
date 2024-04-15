@@ -90,14 +90,13 @@ npm run start:dev
 To build the application for production:
 ```zsh
 npm run build
-npm run start:prod
 ```
 
 ## API Documentation
 ### Firebase Emulator mode:
-http://localhost:3000/swagger#/
+http://localhost:4000
 ### Firebase Production mode:
-http://localhost:3001/swagger#/
+https://<your-server>-<your-project-name>.cloudfunctions.net/<your-function-name>/
 
 
 # Note
