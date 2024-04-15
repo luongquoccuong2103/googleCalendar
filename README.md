@@ -16,6 +16,7 @@ This project is built using a robust tech stack for optimal performance and scal
 - **Database**: Firestore
 - **API Documentation**: Postman Collection
 - **Code Formatting and Linting**: ESLint, Prettier
+- **Logging**: Pino (nestjs-pino, pino-pretty)
 - **Additional Libraries**:
   - moment for date/time management
   - class-trasformer/class-validate for validate API's params
@@ -99,6 +100,9 @@ To build the application for production:
 npm run build
 ```
 
+
+# Log Level : "fatal" | "error" | "warn" | "info" | "debug" | "trace"
+default = trace
 ## API Documentation
 ### Firebase Emulator mode:
 http://localhost:4000
