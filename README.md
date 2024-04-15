@@ -26,7 +26,7 @@ This project is built using a robust tech stack for optimal performance and scal
 - Node.js v18.17.0
 - Java >= version 11
 - Firebase account
-- Google account  
+- Google developer account with 'https://www.googleapis.com/auth/calendar.readonly', 'https://www.googleapis.com/auth/calendar' added into your project
 ## Installation
 To install the project, follow these steps:
 
