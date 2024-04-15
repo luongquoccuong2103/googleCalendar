@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "28814768-0c18-4338-8043-83b466654959",
+		"name": "GoogleCalendarApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21770350"
+	},
+	"item": [
+		{
+			"name": "Google Calendar",
+			"item": [
+				{
+					"name": "Get All Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_local}}{{google_calendar}}/get-schedule",
+							"host": [
+								"{{url_local}}{{google_calendar}}"
+							],
+							"path": [
+								"get-schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync Events",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_local}}{{google_calendar}}/sync-events",
+							"host": [
+								"{{url_local}}{{google_calendar}}"
+							],
+							"path": [
+								"sync-events"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"testUser1234\",\n    \"email\": \"testUser12345@gmail.com\",\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_dev}}{{auth}}/register",
+							"host": [
+								"{{url_dev}}{{auth}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {",
+									"    pm.response.to.have.status(200);",
+									"    var body = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set('access_token', body.data.accessToken);",
+									"    pm.collectionVariables.set('refresh_token', body.data.refreshToken);",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testUser12345@gmail.com\",\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_dev}}{{auth}}/login",
+							"host": [
+								"{{url_dev}}{{auth}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RVc2VyMTIzQGdtYWlsLmNvbSIsInN1YiI6eyJuYW1lIjoidGVzdFVzZXIxMjMifSwiaWF0IjoxNzEzMTAyNTQ4LCJleHAiOjE3MTM3MDczNDh9.fZ9r7iRabh9GO3Ip85VXz2D1mc6N2uUTsPlcDYdDqc0\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_local}}{{auth}}/refresh",
+							"host": [
+								"{{url_local}}{{auth}}"
+							],
+							"path": [
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event",
+			"item": [
+				{
+					"name": "Get All Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_dev}}{{event}}/getAllEvents",
+							"host": [
+								"{{url_dev}}{{event}}"
+							],
+							"path": [
+								"getAllEvents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"googleCalendarEventId\": \"tctimao6iq4s2mtobgotkbhq44\",\n  \"summary\": \"Board Meeting 123456\",\n  \"description\": \"Discuss quarterly revenue and new strategic plans.\",\n  \"start_datetime\": \"2024-04-16T14:00:00\",\n  \"end_datetime\": \"2024-04-16T15:00:00\",\n  \"time_zone\": \"Asia/Ho_Chi_Minh\",\n  \"status\": \"insert\",\n  \"attendees\": [\n    \"janedoe@example.com\",\n    \"johndoe@example.com\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_dev}}{{event}}/create",
+							"host": [
+								"{{url_dev}}{{event}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "url_local",
+			"value": "http://localhost:5001/lamtech-test/us-central1/api/",
+			"type": "string"
+		},
+		{
+			"key": "event",
+			"value": "event",
+			"type": "string"
+		},
+		{
+			"key": "google_calendar",
+			"value": "google-calendar",
+			"type": "string"
+		},
+		{
+			"key": "auth",
+			"value": "auth",
+			"type": "string"
+		},
+		{
+			"key": "url_dev",
+			"value": "https://us-central1-lamtech-test.cloudfunctions.net/api/",
+			"type": "string"
+		}
+	]
+}
