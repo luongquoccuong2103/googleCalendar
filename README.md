@@ -96,7 +96,7 @@ npm run build
 ### Firebase Emulator mode:
 http://localhost:4000
 ### Firebase Production mode:
-https://<your-server>-<your-project-name>.cloudfunctions.net/<your-function-name>/
+https://yourserverlocation-yourprojectname.cloudfunctions.net/yourfunctioname/
 
 
 # Note
