@@ -1,73 +1,118 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Weather Forecast Traffic Cam Backend
 
 ## Description
+This project, 'google-calendar-booking-backend', is a backend service designed to provide custom apis to create/update/cancel booking events, and a schedule job which will automatic sync all the events on Google Calendar. It's built using the NestJS framework, hosting by Firebase functions and Firestore for database management.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Features
+- Authorization with custom APIs
+- CRUD task for booking events
+- Firebase schedule function
+- Easy to integrate with existing Node.js applications
 
+## Tech Stack
+This project is built using a robust tech stack for optimal performance and scalability:
+
+- **Backend Framework**: NestJS
+- **Database**: Firestore
+- **API Documentation**: Postman Collection
+- **Code Formatting and Linting**: ESLint, Prettier
+- **Additional Libraries**:
+  - moment for date/time management
+  - class-trasformer/class-validate for validate API's params
+  - firebase-admin/functions
+  - googleapis for integration with Google Calendar
+  - passport/passport-jwt/passport-local for authentication with JWT for custom APIs 
+### Prerequisites
+- Node.js v18.17.0
+- Java >= version 11
+- Firebase account
+- Google account  
 ## Installation
+To install the project, follow these steps:
 
 ```bash
-$ npm install
+git clone https://github.com/luongquoccuong2103/googleCalendar.git
+cd calendar-api
+npm install
 ```
 
-## Running the app
+## Environment Setup
 
+To run this project, you will need to set up the following environment variables. You can do this by creating a `credentials.json` and `firebase-credentials.json` file in the root directory of the project and adding the following key-value pairs:
+```plaintext
+# credentials.json
+{
+  "web": {
+    "client_id": "YOUR_CLIENT_ID",
+    "project_id": "YOUR_PROJECT_ID",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "redirect_uris": ["http://localhost:8000/google/redirect"]
+  }
+}
+
+
+# firebase-credentials.json
+{
+  "type": "service_account",
+  "project_id": "YOUR_PROJECT_ID",
+  "private_key_id": "YOUR_PRIVATE_KEY_ID",
+  "private_key": "YOUR_PRIVATE_KEY",
+  "client_email": "YOUR_CLIENT_EMAIL",
+  "client_id": "YOUR_CLIENT_ID",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "YOUR_CLIENT_CERT_URL",
+  "universe_domain": "googleapis.com"
+}
+
+```
+
+## Docker support
+This project includes Docker support. Use the following commands to manage Docker containers:
+
+To start Docker containers:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run docker-start
 ```
-
-## Test
-
+To stop Docker containers:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run docker-stop
 ```
 
-## Support
+## Usage
+To start the application in firebase emulator mode:
+```bash
+npm run serve
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+To deploy the application for production:
+```zsh
+firebase deploy
+```
 
-## Stay in touch
+To start the application in development mode:
+```zsh
+npm run start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+To build the application for production:
+```zsh
+npm run build
+npm run start:prod
+```
 
-## License
+## API Documentation
+### Firebase Emulator mode:
+http://localhost:3000/swagger#/
+### Firebase Production mode:
+http://localhost:3001/swagger#/
 
-Nest is [MIT licensed](LICENSE).
+
+# Note
+The Firebase schedule job will not run on emulator mode, you will need to deploy the project to your firebase schedule functions and checklogs. 
+For alternative solution, i have created api "Sync Events" which will do all the task of the job. 
+
