@@ -70,6 +70,10 @@ To run this project, you will need to set up the following environment variables
 }
 
 ```
+## Sequence diagrams
+### Get locations
+![Get locations](.doc/syncjib.png)
+
 
 ## Usage
 To start the application in firebase emulator mode:
