@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as firebase from 'firebase-admin';
 import { FieldValue } from '@google-cloud/firestore';
 import * as path from 'path';
+import { getApps } from 'firebase-admin/app';
 
 @Injectable()
 export class FirebaseService {
@@ -11,16 +12,15 @@ export class FirebaseService {
     'firebase-credentials.json',
   );
   constructor() {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // const serviceAccount = require('../../firebase-credentials.json');
-    firebase.initializeApp({
-      credential: firebase.credential.cert(this.CREDENTIALS_PATH),
-    });
-    this.db = firebase.firestore();
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('dotenv').config();
+    console.log('firebase.apps.length', firebase.apps.length);
+    console.log('getApps().length', getApps().length);
+    if (!getApps().length) {
+      firebase.initializeApp({
+        credential: firebase.credential.cert(this.CREDENTIALS_PATH),
+      });
     }
+
+    this.db = firebase.firestore();
   }
 
   getFirestoreInstance(): FirebaseFirestore.Firestore {
