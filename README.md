@@ -71,18 +71,6 @@ To run this project, you will need to set up the following environment variables
 
 ```
 
-## Docker support
-This project includes Docker support. Use the following commands to manage Docker containers:
-
-To start Docker containers:
-```bash
-npm run docker-start
-```
-To stop Docker containers:
-```bash
-npm run docker-stop
-```
-
 ## Usage
 To start the application in firebase emulator mode:
 ```bash
