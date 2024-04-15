@@ -72,7 +72,7 @@ To run this project, you will need to set up the following environment variables
 ```
 ## Sequence diagrams
 ### Get locations
-![Get locations](.doc/syncjib.png)
+![Get locations](.doc/syncjob.png)
 
 
 ## Usage
