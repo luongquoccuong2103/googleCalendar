@@ -1,7 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from './../user/user.service';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 @Injectable()
@@ -21,7 +20,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User, response: Response) {
+  async login(user: any, response: Response) {
     const payload = {
       username: user.email,
       sub: {
@@ -41,7 +40,7 @@ export class AuthService {
     });
   }
 
-  async refreshToken(user: User) {
+  async refreshToken(user: any) {
     const payload = {
       username: user.email,
       sub: {

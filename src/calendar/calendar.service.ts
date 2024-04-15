@@ -1,14 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 import { authenticate } from '@google-cloud/local-auth';
 import { google, calendar_v3 } from 'googleapis';
 import { OAuth2Client, GoogleAuth } from 'google-auth-library';
-import { FirebaseService } from 'src/core/firestore.service';
-import { StatusType } from 'src/entities/event.entity';
+import { FirebaseService } from '../core/firestore.service';
+import { StatusType } from './../entities/event.entity';
+import { ILoggerService } from './../logger/adapter';
 @Injectable()
 export class CalendarService {
-  private readonly logger = new Logger(CalendarService.name);
   private readonly SCOPES = [
     'https://www.googleapis.com/auth/calendar.readonly',
     'https://www.googleapis.com/auth/calendar',
@@ -21,7 +21,10 @@ export class CalendarService {
 
   private calendar: calendar_v3.Calendar;
 
-  constructor(private firebaseService: FirebaseService) {
+  constructor(
+    private readonly logger: ILoggerService,
+    private firebaseService: FirebaseService,
+  ) {
     this.initialize();
   }
 

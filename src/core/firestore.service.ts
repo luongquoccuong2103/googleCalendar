@@ -12,8 +12,6 @@ export class FirebaseService {
     'firebase-credentials.json',
   );
   constructor() {
-    console.log('firebase.apps.length', firebase.apps.length);
-    console.log('getApps().length', getApps().length);
     if (!getApps().length) {
       firebase.initializeApp({
         credential: firebase.credential.cert(this.CREDENTIALS_PATH),

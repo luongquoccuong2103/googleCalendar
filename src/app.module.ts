@@ -7,6 +7,7 @@ import { CalendarModule } from './calendar/calendar.module';
 import { CoreModule } from './core/core.module';
 import { EventModule } from './event/event.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LoggerModule } from './logger/logger.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -15,6 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CalendarModule,
     CoreModule,
     EventModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
