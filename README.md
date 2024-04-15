@@ -33,7 +33,6 @@ To install the project, follow these steps:
 
 ```bash
 git clone https://github.com/luongquoccuong2103/googleCalendar.git
-cd calendar-api
 npm install
 ```
 
