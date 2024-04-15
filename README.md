@@ -104,6 +104,8 @@ npm run build
 # Log Level : "fatal" | "error" | "warn" | "info" | "debug" | "trace"
 default = trace
 ## API Documentation
+### Postman collection
+I have attached GoogleCalendarApi.postman_collection.json collection into the project, url_local is for local development, url_dev is for production mode 
 ### Firebase Emulator mode:
 http://localhost:4000
 ### Firebase Production mode:
