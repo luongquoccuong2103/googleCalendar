@@ -71,8 +71,11 @@ To run this project, you will need to set up the following environment variables
 
 ```
 ## Sequence diagrams
-### Get locations
+### Sync Events Job
 ![Get locations](.doc/syncjob.png)
+
+### Authentication JWT
+![Get locations](.doc/authen.png)
 
 
 ## Usage
