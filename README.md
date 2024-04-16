@@ -118,6 +118,6 @@ https://yourserverlocation-yourprojectname.cloudfunctions.net/yourfunctioname/
 
 
 # Note
-The Firebase schedule job will not run on emulator mode, you will need to deploy the project to your firebase schedule functions and checklogs. 
-For alternative solution, i have created api "Sync Events" which will do all the task of the job. 
+The Firebase schedule job can only run in production mode, you will need to deploy the project to your firebase schedule functions and checklogs. 
+For alternative solution in local enviroment, i have created api "Sync Events" which will do all the task of the job. 
 
