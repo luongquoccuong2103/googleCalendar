@@ -79,6 +79,12 @@ To run this project, you will need to set up the following environment variables
 
 
 ## Usage
+For first time running the application, you need to authorize the project to use GoogleApis by running:
+```bash
+npm run start:dev
+```
+After init, there should be a token.json file within your root directory
+
 To start the application in firebase emulator mode:
 ```bash
 npm run serve
